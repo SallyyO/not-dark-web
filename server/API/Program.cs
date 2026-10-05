@@ -1,6 +1,12 @@
 var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
+builder.Services.AddControllers();
+builder.Services.AddOpenApiDocument();
 
-app.MapGet("/", () => "Hello World!");
+var app = builder.Build();
+app.UseOpenApi();
+app.UseSwaggerUi();
+app.MapControllers();
+
+//app.MapGet("/", () => "Hello World!");
 
 app.Run();
