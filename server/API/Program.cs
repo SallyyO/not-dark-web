@@ -1,17 +1,35 @@
 using Infra;
-using LinqToDB;
 using Infra.Entities;
+using LinqToDB;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var dbOptions = new DataOptions().UseSQLite("Data Source=app.db");
+// DB
+var dbOptions = new DataOptions()
+    .UseSQLite("Data Source=app.db");
+
 var appDbOptions = new DataOptions<AppDb>(dbOptions);
-builder.Services.AddScoped<AppDb>(serviceProvider =>
+
+builder.Services.AddScoped<AppDb>(_ =>
     new AppDb(appDbOptions));
+
+// Controllers + Swagger
+builder.Services.AddControllers();
+builder.Services.AddOpenApiDocument();
+
 var app = builder.Build();
+
+// Swagger
+app.UseOpenApi();
+app.UseSwaggerUi();
+
+// Controllers
+app.MapControllers();
+
+// Test endpoint
 app.MapGet("/hello", () => "Hello World!");
-app.MapGet("/customers", (AppDb db) =>
-    db.Customers.ToList());
+
+// Db setup
 using var scope = app.Services.CreateScope();
 
 var db = scope.ServiceProvider.GetRequiredService<AppDb>();
@@ -35,5 +53,9 @@ if (db.Customers.Count() == 0)
         Balance = 350
     });
 }
+
+// Temp database test endpoint
+app.MapGet("/customers", (AppDb db) =>
+    db.Customers.ToList());
 
 app.Run();
