@@ -3,6 +3,9 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+# Database
+server/API/app.db
+
 # dotenv files
 .env
 
