@@ -81,6 +81,46 @@ db.CreateTable<WalletTransaction>(
 db.CreateTable<Purchase>(
     tableOptions: TableOptions.CreateIfNotExists);
 
+// Seed categories 
+if (db.Categories.Count() == 0)
+{
+    db.Insert(new Category
+    {
+        Name = "Electronics",
+        Description = "Totally not stolen phones, computers, and other electronic products"
+    });
+
+    db.Insert(new Category
+    {
+        Name = "Stolen Artifacts",
+        Description = "Religious paraphernalia and other goods"
+    });
+
+    db.Insert(new Category
+    {
+        Name = "Weaponry",
+        Description = "GUNZZZZZZZ"
+    });
+
+    db.Insert(new Category
+    {
+        Name = "Drugs",
+        Description = "All of em"
+    });
+    
+    db.Insert(new Category
+    {
+        Name = "Nice to have",
+        Description = "Quality of life stuff (for every day)"
+    });
+    
+    db.Insert(new Category
+    {
+        Name = "Fashion",
+        Description = "Legally obtained clothing and accessories"
+    });
+}
+
 // Seed customer data
 if (db.Customers.Count() == 0)
 {
@@ -132,11 +172,16 @@ if (db.Customers.Count() == 0)
         Type = "Deposit",
         Description = "Initial test balance"
     });
+    
+    var electronics = db.Categories.First(c => c.Name == "Electronics");
+    var fashion = db.Categories.First(c => c.Name == "Fashion");
+    var artifacts = db.Categories.First(c => c.Name == "Stolen Artifacts");
+    var niceToHave = db.Categories.First(c => c.Name == "Nice to have");
 
     db.Insert(new Listing
     {
         VendorId = michael.CustomerId,
-        CategoryId = "Electronics",
+        CategoryId = electronics.CategoryId,
         Title = "Laptops, needs to be gone asap",
         Description = "Works perfectly fine, don't ask where i got em' from tho wink wink",
         Price = 250m,
@@ -147,7 +192,7 @@ if (db.Customers.Count() == 0)
     db.Insert(new Listing
     {
         VendorId = harry.CustomerId,
-        CategoryId = "Fashion",
+        CategoryId = fashion.CategoryId,
         Title = "Not stolen Jacket",
         Description = "No receipt, but it's a good jacket",
         Price = 75m,
@@ -155,10 +200,11 @@ if (db.Customers.Count() == 0)
         IsActive = true
     });
     
+
     db.Insert(new Listing
     {
         VendorId = harry.CustomerId,
-        CategoryId = "Nice to have",
+        CategoryId = niceToHave.CategoryId,
         Title = "Pre-burned spoons",
         Description = "For your convenience <3",
         Price = 75m,
@@ -169,7 +215,7 @@ if (db.Customers.Count() == 0)
     db.Insert(new Listing
     {
         VendorId = karen.CustomerId,
-        CategoryId = "Nice to have",
+        CategoryId = niceToHave.CategoryId,
         Title = "Karen for hire",
         Description = "Give me the location and the name of the employee you'd like me to scream at. 20 for 20 minutes " +
                       "\nBuy up to 3 for 1 session",
@@ -181,52 +227,12 @@ if (db.Customers.Count() == 0)
     db.Insert(new Listing
     {
         VendorId = karen.CustomerId,
-        CategoryId = "Stolen Artifacts",
+        CategoryId = artifacts.CategoryId,
         Title = "Louvre INSPIRED emerald necklace and earring set",
         Description = "Got my hands on them in 2025. No receipt",
         Price = 75000000m,
         Stock = 1,
         IsActive = true
-    });
-}
-
-// Seed categories 
-if (db.Categories.Count() == 0)
-{
-    db.Insert(new Category
-    {
-        Name = "Electronics",
-        Description = "Totally not stolen phones, computers, and other electronic products"
-    });
-
-    db.Insert(new Category
-    {
-        Name = "Stolen Artifacts",
-        Description = "Religious paraphernalia and other goods"
-    });
-
-    db.Insert(new Category
-    {
-        Name = "Weaponry",
-        Description = "GUNZZZZZZZ"
-    });
-
-    db.Insert(new Category
-    {
-        Name = "Drugs",
-        Description = "All of em"
-    });
-    
-    db.Insert(new Category
-    {
-        Name = "Nice to have",
-        Description = "Quality of life stuff (for every day)"
-    });
-    
-    db.Insert(new Category
-    {
-        Name = "Fashion",
-        Description = "Legally obtained clothing and accessories"
     });
 }
 

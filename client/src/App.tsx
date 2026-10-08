@@ -119,9 +119,14 @@ export function App() {
           <span>|</span>
           <button onClick={() => setView("wallet")}>account <b>{money(currentUser?.balance ?? 0)}</b></button>
           <select value={userId} onChange={(event) => chooseUser(event.target.value)} aria-label="Account">
-            <option value="">guest</option>
-            {customers.map((customer) => <option key={customer.customerId} value={customer.customerId}>{customer.username}</option>)}
+            {customers.map((customer) => (
+                <option key={customer.customerId} value={customer.customerId}>
+                  {customer.username}
+                </option>
+            ))}
           </select>
+
+
         </div>
       </header>
 
