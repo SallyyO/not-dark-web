@@ -101,7 +101,7 @@ if (db.Customers.Count() == 0)
     var karen = new Customer
     {
         Username = "kysKaren",
-        Email = "wheresthemanager@legal.com",
+        Email = "whereisthemanager@legal.com",
         Balance = 350m
     };
 
@@ -133,7 +133,64 @@ if (db.Customers.Count() == 0)
         Description = "Initial test balance"
     });
 
-// Seed categories
+    db.Insert(new Listing
+    {
+        VendorId = michael.CustomerId,
+        CategoryId = "Electronics",
+        Title = "Laptops, needs to be gone asap",
+        Description = "Works perfectly fine, don't ask where i got em' from tho wink wink",
+        Price = 250m,
+        Stock = 5,
+        IsActive = true
+    });
+
+    db.Insert(new Listing
+    {
+        VendorId = harry.CustomerId,
+        CategoryId = "Fashion",
+        Title = "Not stolen Jacket",
+        Description = "No receipt, but it's a good jacket",
+        Price = 75m,
+        Stock = 1,
+        IsActive = true
+    });
+    
+    db.Insert(new Listing
+    {
+        VendorId = harry.CustomerId,
+        CategoryId = "Nice to have",
+        Title = "Pre-burned spoons",
+        Description = "For your convenience <3",
+        Price = 75m,
+        Stock = 1,
+        IsActive = true
+    });
+    
+    db.Insert(new Listing
+    {
+        VendorId = karen.CustomerId,
+        CategoryId = "Nice to have",
+        Title = "Karen for hire",
+        Description = "Give me the location and the name of the employee you'd like me to scream at. 20 for 20 minutes " +
+                      "\nBuy up to 3 for 1 session",
+        Price = 20m,
+        Stock = 420,
+        IsActive = true
+    });
+    
+    db.Insert(new Listing
+    {
+        VendorId = karen.CustomerId,
+        CategoryId = "Stolen Artifacts",
+        Title = "Louvre INSPIRED emerald necklace and earring set",
+        Description = "Got my hands on them in 2025. No receipt",
+        Price = 75000000m,
+        Stock = 1,
+        IsActive = true
+    });
+}
+
+// Seed categories 
 if (db.Categories.Count() == 0)
 {
     db.Insert(new Category
@@ -145,7 +202,7 @@ if (db.Categories.Count() == 0)
     db.Insert(new Category
     {
         Name = "Stolen Artifacts",
-        Description = "Religious paraphernalia"
+        Description = "Religious paraphernalia and other goods"
     });
 
     db.Insert(new Category
@@ -159,31 +216,17 @@ if (db.Categories.Count() == 0)
         Name = "Drugs",
         Description = "All of em"
     });
-}
-
-// Temp database test endpoint
-app.MapGet("/customers", (AppDb db) =>
-    db.Customers.ToList());
-    db.Insert(new Listing
+    
+    db.Insert(new Category
     {
-        VendorId = michael.CustomerId,
-        CategoryId = "electronics",
-        Title = "Test Laptop",
-        Description = "Laptop for testing, wink wink",
-        Price = 250m,
-        Stock = 5,
-        IsActive = true
+        Name = "Nice to have",
+        Description = "Quality of life stuff (for every day)"
     });
-
-    db.Insert(new Listing
+    
+    db.Insert(new Category
     {
-        VendorId = harry.CustomerId,
-        CategoryId = "clothing",
-        Title = "Not stolen Jacket",
-        Description = "No receipt, but it's a good jacket",
-        Price = 75m,
-        Stock = 1,
-        IsActive = true
+        Name = "Fashion",
+        Description = "Legally obtained clothing and accessories"
     });
 }
 
