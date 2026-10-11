@@ -35,9 +35,11 @@ public class PurchasesController (AppDb db) : ControllerBase
         if (listing.Stock < request.Quantity) return BadRequest("The seller ain't got enough of this item, sorry");
         
         var total = listing.Price * request.Quantity;
+        // Reward repeat buyers: once a buyer has placed more than 2 orders
+        // with this vendor, apply 20% off their next and subsequent orders.
         var previousOrdersWithVendor = db.Purchases.Count(x =>
             x.BuyerId == buyer.CustomerId && x.VendorId == listing.VendorId);
-        var discountApplied = previousOrdersWithVendor > 4;
+        var discountApplied = previousOrdersWithVendor > 2;
         if (discountApplied) total *= 0.80m;
 
         if (buyer.Balance < total) return BadRequest("Broke ass bitch, you don't have enough money in your wallet");
