@@ -93,9 +93,13 @@ export function App() {
     }
 
     try {
-      await api.purchases.purchase({ buyerId: userId, listingId: listing.listingId, quantity });
+      const response = await api.purchases.purchase({ buyerId: userId, listingId: listing.listingId, quantity });
       setSelected(null);
-      setNotice(`Order placed for ${listing.title}.`);
+      const regularTotal = listing.price * quantity;
+      const chargedTotal = response.data.totalPrice;
+      setNotice(chargedTotal < regularTotal
+        ? `Order placed for ${listing.title}. 20% repeat-buyer discount applied: ${money(regularTotal - chargedTotal)} saved; paid ${money(chargedTotal)}.`
+        : `Order placed for ${listing.title}. Total: ${money(chargedTotal)}.`);
       await load();
     } catch (error) {
       setNotice(error instanceof Error ? error.message : "The order could not be completed");
@@ -327,7 +331,7 @@ function AdminPage({ categories, onChanged }: { categories: Category[]; onChange
     catch (error) { setStatus(error instanceof Error ? error.message : "Could not remove category."); }
   };
 
-  return <div className="simple-page"><h1>Categories</h1><p>Create and remove the categories used by listings.</p>{status && <p className="form-message">{status}</p>}<div className="category-form"><input placeholder="Category name" value={name} onChange={(e) => setName(e.target.value)} /><input placeholder="Description (optional)" value={description} onChange={(e) => setDescription(e.target.value)} /><button className="plain-button" onClick={() => void add}>Add</button></div><div className="simple-list">{categories.map((category) => <div className="simple-list-row" key={category.id}><span><strong>{category.name}</strong>{category.description ? ` — ${category.description}` : ""}</span><button className="link-button" onClick={() => void remove(category.id)}>remove</button></div>)}</div></div>;
+  return <div className="simple-page"><h1>Categories</h1><p>Create and remove the categories used by listings.</p>{status && <p className="form-message">{status}</p>}<div className="category-form"><input placeholder="Category name" value={name} onChange={(e) => setName(e.target.value)} /><input placeholder="Description (optional)" value={description} onChange={(e) => setDescription(e.target.value)} /><button className="plain-button" type="button" disabled={!name.trim()} onClick={() => void add()}>Add</button></div><div className="simple-list">{categories.map((category) => <div className="simple-list-row" key={category.id}><span><strong>{category.name}</strong>{category.description ? ` — ${category.description}` : ""}</span><button className="link-button" onClick={() => void remove(category.id)}>remove</button></div>)}</div></div>;
 }
 
 export default App;
